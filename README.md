@@ -5,7 +5,7 @@ Phada is a small utility for _dealing with_ AfricasTalking's USSD input. If you'
 
 Phada is a library to reduce the ceremony required to read user's current input, as a bonus you get a way to store the session data
 
-Phada is [Chichewa]() for `Hopscotch`.
+Phada is [Chichewa](https://en.wikipedia.org/wiki/Chichewa) for `Hopscotch`.
 
 ## USAGE
 

@@ -138,9 +138,6 @@ func validateUssdRequestSession(req *UssdRequestSession) error {
 		return errors.New("UssdRequestSession SessionID cannot be empty")
 	}
 
-	if req.Channel == "" {
-		return errors.New("UssdRequestSession Channel cannot be empty")
-	}
 	// req.Text can be empty
 	return nil
 }

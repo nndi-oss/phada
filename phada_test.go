@@ -37,22 +37,6 @@ func TestValidateUssdRequest_SessionID(t *testing.T) {
 	}
 }
 
-// TestValidateUssdRequest_Channel
-func TestValidateUssdRequest_Channel(t *testing.T) {
-	formData := url.Values{
-		"phoneNumber": []string{"265888123456"},
-		"text":        []string{"ABCDE"},
-		"sessionId":   []string{"1234567890"},
-		"channel":     []string{""},
-	}
-
-	_, err := parseUrlValuesToUssdRequestSession(formData)
-
-	if err != nil && err.Error() != "UssdRequestSession Channel cannot be empty" {
-		t.Errorf("Expected error message")
-	}
-}
-
 // TestUssdRequest_CountHops
 func TestUssdRequest_CountHops(t *testing.T) {
 	u := &UssdRequestSession{

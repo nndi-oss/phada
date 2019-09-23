@@ -1,6 +1,7 @@
 package phada
 
 import (
+	"encoding/json"
 	"errors"
 	"time"
 
@@ -26,21 +27,25 @@ func NewRedisSessionStore(redisClient *redis.Client) *RedisSessionStore {
 
 // PutHop
 func (m *RedisSessionStore) PutHop(ussdRequest *UssdRequestSession) error {
-	e, ok := m.client.Get(ussdRequest.SessionID)
-	if !ok {
-		m.client.Set(ussdRequest.SessionID, ussdRequest)
-		// return errors.New("Failed to read session data from memory store")
+	data, err := m.client.Get(ussdRequest.SessionID).Result()
+	if err != nil {
+		return m.client.Set(ussdRequest.SessionID, ussdRequest.ToJSON(), 0).Err()
 	}
 
-	if e == nil {
-		m.client.Set(ussdRequest.SessionID, *ussdRequest)
-		return nil
+	if data == "" {
+		return m.client.Set(ussdRequest.SessionID, ussdRequest.ToJSON(), 0).Err()
 	}
-	existing := e.(UssdRequestSession)
+	var existing *UssdRequestSession
+	err = json.Unmarshal([]byte(data), existing)
+	if err != nil {
+		return err
+	}
 	existing.RecordHop(ussdRequest.Text)
-	m.client.Set(ussdRequest.SessionID, existing)
-	m.lastWriteTime = time.Now()
-	return nil
+	err = m.client.Set(ussdRequest.SessionID, existing.ToJSON(), 0).Err()
+	if err != nil {
+		m.lastWriteTime = time.Now()
+	}
+	return err
 }
 
 // Delete
@@ -50,12 +55,15 @@ func (m *RedisSessionStore) Delete(sessionID string) {
 
 // Get
 func (m *RedisSessionStore) Get(sessionID string) (*UssdRequestSession, error) {
-	e, ok := m.client.Get(sessionID)
-	if !ok {
+	data, err := m.client.Get(sessionID).Result()
+	if err != nil {
 		return nil, errors.New("Session does not exist in SessionStore")
 	}
+	var existing *UssdRequestSession
+	err = json.Unmarshal([]byte(data), existing)
+	if err != nil {
+		return nil, err
+	}
 
-	session := e.(UssdRequestSession)
-
-	return &session, nil
+	return existing, nil
 }

@@ -2,6 +2,7 @@ package phada
 
 import (
 	"errors"
+	"encoding/json"
 	"net/http"
 	"net/url"
 	"strings"
@@ -12,14 +13,17 @@ import (
 ///
 /// go representation of the structure of an AfricasTalking USSD call
 type UssdRequestSession struct {
-	PhoneNumber string
-	SessionID   string
-	Text        string
-	Channel     string
-	State       int // The State of the request
-	startedAt   time.Time
-	hops        int // Number of hops for this ussd session
-	textOffset  int // The offset in the text from the last hop
+	PhoneNumber string `json:"phoneNumber"`
+	SessionID   string `json:"sessionID"`
+	Text        string `json:"text"`
+	Channel     string `json:"channel"`
+	// The State of the request
+	State       int	   `json:"state"`
+	startedAt   time.Time `json:"startetAt"`
+	// Number of hops for this ussd session
+	hops        int     `json:"hopCount"`
+	// The offset in the text from the last hop
+	textOffset  int     `json:"textOffset"`
 }
 
 /// SessionStore
@@ -100,6 +104,18 @@ func (u *UssdRequestSession) CountHops() int {
 	a := strings.Split(u.Text, "*")
 
 	return len(a) + 1
+}
+
+// ToJSON
+//
+// Convert the UssdRequestSession to JSON string or empty string on error
+func (u *UssdRequestSession) ToJSON() string {
+	b, err := json.Marshal(u)
+	if err != nil {
+		return ""
+	}
+
+	return string(b)
 }
 
 // ParseUssdRequestSession

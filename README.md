@@ -16,7 +16,7 @@ fill the `UssdRequestSession` struct yourself if you're using a framework like G
 
 ```go
 import (
-    "bitbucket.org/nndi/phada"
+    "github.com/nndi-oss/phada"
 )
 
 var (
@@ -63,4 +63,4 @@ MIT License, see [LICENSE.txt](./LICENSE)
 
 ---
 
-Copyright (c) 2018, NNDI
+Copyright (c) 2018 - 2022, NNDI

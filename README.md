@@ -28,15 +28,6 @@ func handler(w http.ResponseWriter, req *http.Request) {
     if err != nil {
         log.Errorf("Failed to parse request to UssdRequestSession, %s", err)
     }
-    /* 
-    * // If you're not using the standard lib net/http server
-    session := &UssdRequestSession {
-        PhoneNumber: "...", // get from the request's form data
-        SessionID: "...", // get from the request's form data
-        Channel: "...", // get from the request's form data
-        Text: "...", // get from the request's form data
-    }
-    */
     err = sessionStore.PutHop(session) // store/persist the session
     if err != nil {
         // handle the error
@@ -56,6 +47,7 @@ func handler(w http.ResponseWriter, req *http.Request) {
     fmt.Printf("Got data: %s", session.Text)
 }
 ```
+
 
 ## LICENSE
 

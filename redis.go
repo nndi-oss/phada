@@ -1,11 +1,12 @@
 package phada
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"time"
 
-	"github.com/go-redis/redis"
+	redis "github.com/redis/go-redis/v9"
 )
 
 // RedisSessionStore
@@ -27,13 +28,14 @@ func NewRedisSessionStore(redisClient *redis.Client) *RedisSessionStore {
 
 // PutHop
 func (m *RedisSessionStore) PutHop(ussdRequest *UssdRequestSession) error {
-	data, err := m.client.Get(ussdRequest.SessionID).Result()
+	ctx := context.Background()
+	data, err := m.client.Get(ctx, ussdRequest.SessionID).Result()
 	if err != nil {
-		return m.client.Set(ussdRequest.SessionID, ussdRequest.ToJSON(), 0).Err()
+		return m.client.Set(ctx, ussdRequest.SessionID, ussdRequest.ToJSON(), 0).Err()
 	}
 
 	if data == "" {
-		return m.client.Set(ussdRequest.SessionID, ussdRequest.ToJSON(), 0).Err()
+		return m.client.Set(ctx, ussdRequest.SessionID, ussdRequest.ToJSON(), 0).Err()
 	}
 	var existing *UssdRequestSession
 	err = json.Unmarshal([]byte(data), existing)
@@ -41,7 +43,7 @@ func (m *RedisSessionStore) PutHop(ussdRequest *UssdRequestSession) error {
 		return err
 	}
 	existing.RecordHop(ussdRequest.Text)
-	err = m.client.Set(ussdRequest.SessionID, existing.ToJSON(), 0).Err()
+	err = m.client.Set(ctx, ussdRequest.SessionID, existing.ToJSON(), 0).Err()
 	if err != nil {
 		m.lastWriteTime = time.Now()
 	}
@@ -50,12 +52,12 @@ func (m *RedisSessionStore) PutHop(ussdRequest *UssdRequestSession) error {
 
 // Delete
 func (m *RedisSessionStore) Delete(sessionID string) {
-	m.client.Del(sessionID)
+	m.client.Del(context.Background(), sessionID)
 }
 
 // Get
 func (m *RedisSessionStore) Get(sessionID string) (*UssdRequestSession, error) {
-	data, err := m.client.Get(sessionID).Result()
+	data, err := m.client.Get(context.Background(), sessionID).Result()
 	if err != nil {
 		return nil, errors.New("Session does not exist in SessionStore")
 	}

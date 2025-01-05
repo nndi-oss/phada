@@ -1,34 +1,34 @@
 package phada
 
 import (
-	"errors"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
 )
 
-/// UssdRequestSession
-///
-/// go representation of the structure of an AfricasTalking USSD call
+// / UssdRequestSession
+// /
+// / go representation of the structure of an AfricasTalking USSD call
 type UssdRequestSession struct {
 	PhoneNumber string `json:"phoneNumber"`
 	SessionID   string `json:"sessionID"`
 	Text        string `json:"text"`
 	Channel     string `json:"channel"`
 	// The State of the request
-	State       int	   `json:"state"`
-	startedAt   time.Time `json:"startetAt"`
+	State     int       `json:"-"`
+	startedAt time.Time `json:"-"`
 	// Number of hops for this ussd session
-	hops        int     `json:"hopCount"`
+	hops int `json:"-"`
 	// The offset in the text from the last hop
-	textOffset  int     `json:"textOffset"`
+	textOffset int `json:"-"`
 }
 
-/// SessionStore
-///
-/// Interface for storing session data
+// / SessionStore
+// /
+// / Interface for storing session data
 type SessionStore interface {
 	Get(sessionID string) (*UssdRequestSession, error)
 	PutHop(*UssdRequestSession) error

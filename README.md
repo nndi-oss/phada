@@ -1,6 +1,8 @@
 Phada
 =====
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/nndi-oss/phada.svg)](https://pkg.go.dev/github.com/nndi-oss/phada)
+
 Phada is a small utility for _dealing with_ AfricasTalking's USSD input. If you've tried to build a USSD application with AT you may have come about the "asterix input problem" i.e. where the data is fed to your application as asterisk separated (ASV?) data.
 
 Phada is a library to reduce the ceremony required to read user's current input, as a bonus you get a way to store the session data
@@ -8,6 +10,12 @@ Phada is a library to reduce the ceremony required to read user's current input,
 Phada is [Chichewa](https://en.wikipedia.org/wiki/Chichewa) for `Hopscotch`.
 
 ## USAGE
+
+Install the module 
+
+```sh
+$ go get github.com/nndi-oss/phada@v0.4.0
+```
 
 If you're using the standard `net/http` package then you can create the UssdRequestSession
 using the `ParseUssdRequest(*http.Request)` function. Otherwise you will have to 

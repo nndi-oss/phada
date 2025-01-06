@@ -102,7 +102,6 @@ func TestUssdTextProcessor_GetHopN(t *testing.T) {
 	assertEquals(t, "Baz", u.GetHopN(6))
 	assertEquals(t, "Foo:Bar", u.GetHopN(7))
 	assertEquals(t, "Phada", u.GetHopN(8))
-
 }
 
 // assertEquals utility function for asserting two strings are equal

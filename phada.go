@@ -16,7 +16,9 @@ type UssdRequestSession struct {
 	PhoneNumber string `json:"phoneNumber"`
 	SessionID   string `json:"sessionID"`
 	Text        string `json:"text"`
-	Channel     string `json:"channel"`
+	Channel     string `json:"-"` // Deprecated - no longer being used
+	NetworkCode string `json:"networkCode"`
+	ServiceCode string `json:"serviceCode"`
 	// The State of the request
 	State     int       `json:"-"`
 	startedAt time.Time `json:"-"`
@@ -135,7 +137,9 @@ func parseUrlValuesToUssdRequestSession(form url.Values) (*UssdRequestSession, e
 		PhoneNumber: form.Get("phoneNumber"),
 		SessionID:   form.Get("sessionId"),
 		Text:        form.Get("text"),
-		Channel:     form.Get("channel"),
+		Channel:     form.Get("channel"), // Deprecated
+		NetworkCode: form.Get("networkCode"),
+		ServiceCode: form.Get("serviceCode"),
 		textOffset:  0,
 		startedAt:   time.Now(),
 	}

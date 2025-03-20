@@ -5,7 +5,7 @@ go 1.22
 require (
 	github.com/dgraph-io/ristretto v0.0.1
 	github.com/orcaman/concurrent-map v0.0.0-20190107190726-7ed82d9cb717
-	github.com/redis/go-redis/v9 v9.7.0
+	github.com/redis/go-redis/v9 v9.7.3
 )
 
 require (
